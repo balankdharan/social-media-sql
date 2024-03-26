@@ -2,6 +2,8 @@
   height: 100vh;
   display: flex;
   align-items: center;
+  background-color: #201f27;
+
   justify-content: center;
   .card {
     width: 50%;
@@ -12,24 +14,28 @@
     overflow: hidden;
     .left {
       flex: 1;
-      background: url("https://images.shiksha.com/mediadata/ugcDocuments/images/wordpressImages/2023_08_What-is-social-media.jpg")
-        center;
+      background: linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.7)),
+        url("https://teambuilding.com/wp-content/uploads/2022/06/team-building-events-and-activities-.jpg")
+          center;
       background-size: cover;
       padding: 50px;
       display: flex;
       flex-direction: column;
       gap: 30px;
       color: rebeccapurple;
-      text-shadow: -0.5px 0 white, 0 0.5px white, 0.5px 0 white, 0 -0.5px white;
       h1 {
         margin: 0;
         font-size: 100px;
         line-height: 100px;
+        text-shadow: -0.5px 0 white, 0 0.5px white, 0.5px 0 white,
+          0 -0.5px white;
       }
       p {
+        color: white;
       }
       span {
         font-size: 14px;
+        color: white;
       }
       button {
         width: 50%;

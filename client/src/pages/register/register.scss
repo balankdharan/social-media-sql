@@ -1,5 +1,7 @@
 .register {
   height: 100vh;
+  background-color: #201f27;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -7,29 +9,35 @@
     width: 50%;
     border-radius: 15px;
     display: flex;
+    flex-direction: row-reverse;
     background-color: white;
     min-height: 600px;
     overflow: hidden;
     .left {
       flex: 1;
-      background: url("https://images.shiksha.com/mediadata/ugcDocuments/images/wordpressImages/2023_08_What-is-social-media.jpg")
-        center;
+      background: linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.7)),
+        url("https://blog.contentstudio.io/wp-content/uploads/2022/06/social-media-team-for-your-agency-1.jpg")
+          center;
       background-size: cover;
+
       padding: 50px;
       display: flex;
       flex-direction: column;
       gap: 30px;
       color: rebeccapurple;
-      text-shadow: -0.5px 0 white, 0 0.5px white, 0.5px 0 white, 0 -0.5px white;
       h1 {
         margin: 0;
         font-size: 100px;
         line-height: 100px;
+        text-shadow: -0.5px 0 white, 0 0.5px white, 0.5px 0 white,
+          0 -0.5px white;
       }
       p {
+        color: white;
       }
       span {
         font-size: 14px;
+        color: white;
       }
       button {
         width: 50%;
