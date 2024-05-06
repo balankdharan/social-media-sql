@@ -12,13 +12,20 @@ export const login = (req, res) => {
       req.body.password,
       data[0].password
     );
+
     if (!checkPassword) return res.status(400).json("Wrong credentials");
 
-    const token = jwt.sign({ id: data[0].id }, "secretKey");
+    const token = jwt.sign({ id: data[0].id }, "secretKey", {
+      expiresIn: "30d",
+    });
     const { password, ...others } = data[0];
+
     res
       .cookie("accessToken", token, {
         httpOnly: true,
+        secure: process.env.NODE_ENV !== "development",
+        sameSite: "strict",
+        maxAge: 30 * 24 * 60 * 60 * 1000,
       })
       .status(200)
       .json(others);
@@ -55,7 +62,7 @@ export const logout = (req, res) => {
   res
     .clearCookie("accessToken", {
       secure: true,
-      SameSite: "none",
+      sameSite: "none",
     })
     .status(200)
     .json("User logout");
