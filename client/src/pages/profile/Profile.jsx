@@ -9,6 +9,7 @@ import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/posts/Posts";
+import Update from "../../components/update/Update";
 const Profile = () => {
   return (
     <div className="profile">

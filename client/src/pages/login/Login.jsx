@@ -4,6 +4,10 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 import { useState } from "react";
 
+// {
+//   "username":"test",
+//   "password":"test123"
+// }
 const Login = () => {
   const { login } = useContext(AuthContext);
   const [inputs, setInputs] = useState({
