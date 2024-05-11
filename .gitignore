@@ -1,4 +1,5 @@
 backend/node_modules
 client/node_modules
+client/public/upload
 backend/.env
 client/.env
