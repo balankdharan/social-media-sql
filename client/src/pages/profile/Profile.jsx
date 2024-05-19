@@ -10,61 +10,77 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/posts/Posts";
 import Update from "../../components/update/Update";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { makeRequest } from "../../axios";
+import { AuthContext } from "../../context/authContext";
+import { useLocation } from "react-router-dom";
+import { useContext } from "react";
 const Profile = () => {
+  const userId = parseInt(useLocation().pathname.split("/")[2]);
+  const { currentUser } = useContext(AuthContext);
+
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["user"],
+    queryFn: () =>
+      makeRequest.get("/users/find/" + userId).then((res) => res.data),
+  });
+  // console.log("data", data);
   return (
     <div className="profile">
-      <div className="images">
-        <img
-          src="https://elements-video-cover-images-0.imgix.net/files/366410468/Food+Instagram+Story+Pack.jpg?auto=compress%2Cformat&h=506&w=900&fit=min&s=e4437752d83220f0d12345853257a9e1"
-          alt="cover"
-          className="cover"
-        />
-        <img
-          src="https://marketplace.canva.com/EAFpm06B7Bs/2/0/900w/canva-yellow-black-white-organic-illustrative-sustainable-habits-food-waste-instagram-story-QsyUEzmLius.jpg"
-          alt="profile"
-          className="profile"
-        />
-      </div>
-      <div className="profileContainer">
-        <div className="uInfo">
-          <div className="left">
-            <a href="http://facebook.com">
-              <FacebookTwoToneIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <InstagramIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <TwitterIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <LinkedInIcon fontSize="large" />
-            </a>
-            <a href="http://facebook.com">
-              <PinterestIcon fontSize="large" />
-            </a>
+      {isLoading ? (
+        "Loading"
+      ) : (
+        <>
+          <div className="images">
+            <img src={data.coverPic} alt="cover" className="cover" />
+            <img src={data.profilePic} alt="profile" className="profile" />
           </div>
-          <div className="center">
-            <span>Test name</span>
-            <div className="info">
-              <div className="item">
-                <PlaceIcon />
-                <span>USA</span>
+          <div className="profileContainer">
+            <div className="uInfo">
+              <div className="left">
+                <a href="http://facebook.com">
+                  <FacebookTwoToneIcon fontSize="large" />
+                </a>
+                <a href="http://facebook.com">
+                  <InstagramIcon fontSize="large" />
+                </a>
+                <a href="http://facebook.com">
+                  <TwitterIcon fontSize="large" />
+                </a>
+                <a href="http://facebook.com">
+                  <LinkedInIcon fontSize="large" />
+                </a>
+                <a href="http://facebook.com">
+                  <PinterestIcon fontSize="large" />
+                </a>
               </div>
-              <div className="item">
-                <LanguageIcon />
-                <span>google.com</span>
+              <div className="center">
+                <span>{data.name}</span>
+                <div className="info">
+                  <div className="item">
+                    <PlaceIcon />
+                    <span>{data.city}</span>
+                  </div>
+                  <div className="item">
+                    <LanguageIcon />
+                    <span>{data.website}</span>
+                  </div>
+                </div>
+                {userId === currentUser.id ? (
+                  <button>Update</button>
+                ) : (
+                  <button>Follow</button>
+                )}
+              </div>
+              <div className="right">
+                <EmailOutlinedIcon />
+                <MoreVertIcon />
               </div>
             </div>
-            <button>Follow</button>
+            <Posts />
           </div>
-          <div className="right">
-            <EmailOutlinedIcon />
-            <MoreVertIcon />
-          </div>
-        </div>
-        <Posts />
-      </div>
+        </>
+      )}
     </div>
   );
 };
