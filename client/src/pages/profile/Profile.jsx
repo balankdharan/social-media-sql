@@ -14,8 +14,9 @@ import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import { AuthContext } from "../../context/authContext";
 import { useLocation } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 const Profile = () => {
+  const [openUpdate, setOpenUpdate] = useState(false);
   const userId = parseInt(useLocation().pathname.split("/")[2]);
   const { currentUser } = useContext(AuthContext);
 
@@ -24,7 +25,33 @@ const Profile = () => {
     queryFn: () =>
       makeRequest.get("/users/find/" + userId).then((res) => res.data),
   });
-  // console.log("data", data);
+
+  const { isLoading: rIsLoading, data: relationshipData } = useQuery({
+    queryKey: ["relationship"],
+    queryFn: () =>
+      makeRequest
+        .get("/relationship/?followedUserId=" + userId)
+        .then((res) => res.data),
+  });
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (following) => {
+      if (following)
+        return makeRequest.delete("/relationship?userId=" + userId);
+      return makeRequest.post("/relationship", { userId });
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries(["relationship"]);
+    },
+  });
+
+  // console.log("date", data);
+
+  const handleFollow = () => {
+    mutation.mutate(relationshipData.includes(currentUser.id));
+  };
   return (
     <div className="profile">
       {isLoading ? (
@@ -66,10 +93,16 @@ const Profile = () => {
                     <span>{data.website}</span>
                   </div>
                 </div>
-                {userId === currentUser.id ? (
-                  <button>Update</button>
+                {rIsLoading ? (
+                  "loading"
+                ) : userId === currentUser.id ? (
+                  <button onClick={() => setOpenUpdate(true)}>Update</button>
                 ) : (
-                  <button>Follow</button>
+                  <button onClick={handleFollow}>
+                    {relationshipData.includes(currentUser.id)
+                      ? "Following"
+                      : "Follow"}
+                  </button>
                 )}
               </div>
               <div className="right">
@@ -77,10 +110,11 @@ const Profile = () => {
                 <MoreVertIcon />
               </div>
             </div>
-            <Posts />
+            <Posts userId={userId} />
           </div>
         </>
       )}
+      {openUpdate && <Update setOpenUpdate={setOpenUpdate} user={data} />}
     </div>
   );
 };

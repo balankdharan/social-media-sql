@@ -3,9 +3,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export const getLikes = (req, res) => {
-  const commentQuery = "SELECT userId FROM likes WHERE postId = ?";
+  const likeQuery = "SELECT userId FROM likes WHERE postId = ?";
 
-  db.query(commentQuery, [req.query.postId], (err, data) => {
+  db.query(likeQuery, [req.query.postId], (err, data) => {
     if (err) return res.status(500).json({ err });
     return res.status(200).json(data.map((like) => like.userId));
   });
